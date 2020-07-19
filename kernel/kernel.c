@@ -18,10 +18,14 @@ void kernel_main(void) {
 	terminal_initialize();
 
 	/* Newline support is left as an exercise. */
-	for(int i = 0; i<28; i++) {
-		terminal_putchar(i/10+'0');
-		terminal_putchar(i%10+'0');
-		terminal_putchar('\n');
-		terminal_writestring(" Hello, kernel World! test \ntest test\n");
-	}
+	//for(int i = 0; i<28; i++) {
+	//	terminal_putchar(i/10+'0');
+	//	terminal_putchar(i%10+'0');
+	//	terminal_putchar('\n');
+	//	terminal_writestring(" Hello, kernel World! test \ntest test\n");
+	//}
+	terminal_writestring("Ovo je test\n");
+	kprintf("TEST %d\n", 42);
+	kprintf("TEST %p\n", "test");
+	
 }
