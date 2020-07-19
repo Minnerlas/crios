@@ -40,74 +40,76 @@ void kprintf(char* format, ...) {
     char *s;
     va_start(args, format);
 
-    for(int i=0; format[i]!=0; i++){
-        while(format[i]!='%'){
-            if(format[i]==0){
-                f=1;
-                break;
-            }
-            terminal_putchar(format[i]);
-            i++;
-        }
- 
-        if(f)
-            break;
- 
- 
-        switch(format[++i]){
-            case 'd':
-                j=va_arg(args,int);
-                if (j<0){
-                    j=-j;
-                    terminal_putchar('-');
-                }
-				terminal_writestring(inttoascii(j,10));
-                //fputs(inttoascii(j,10),stdout);
-                break;
-            case 'u':
-                j=va_arg(args,int);
-				terminal_writestring(inttoascii(j,10));
-                //fputs(inttoascii(j,10),stdout);
-                break;
+	terminal_lock_vga();
+	for(int i=0; format[i]!=0; i++){
+		while(format[i]!='%'){
+			if(format[i]==0){
+				f=1;
+				break;
+			}
+			terminal_putchar(format[i]);
+			i++;
+		}
 
-            case 'p':
-				terminal_writestring("0x");
-            case 'x':
-                j=(unsigned int)va_arg(args,int);
-				terminal_writestring(inttoascii(j,16));
-                //fputs(inttoascii(j,16),stdout);
-                break;
+		if(f)
+			break;
 
-            case 'c':
-                j=va_arg(args,int);
-                terminal_putchar(j);
-                break;
 
-            case 's':
-                s=va_arg(args,char*);
-                if(s==NULL){
-                    terminal_writestring("(null)");
-                    break;
-                }
-                terminal_writestring(s);
-                break;
+		switch(format[++i]){
+			case 'd':
+				j=va_arg(args,int);
+				if (j<0){
+					j=-j;
+					terminal_putchar('-');
+				}
+				terminal_writestring_nolock(inttoascii(j,10));
+				//fputs(inttoascii(j,10),stdout);
+				break;
+			case 'u':
+				j=va_arg(args,int);
+				terminal_writestring_nolock(inttoascii(j,10));
+				//fputs(inttoascii(j,10),stdout);
+				break;
 
-            case 'o':
-                j=va_arg(args,int);
-                terminal_writestring(inttoascii(j,8));
-                //fputs(inttoascii(j,8),stdout);
+			case 'p':
+				terminal_writestring_nolock("0x");
+			case 'x':
+				j=(unsigned int)va_arg(args,int);
+				terminal_writestring_nolock(inttoascii(j,16));
+				//fputs(inttoascii(j,16),stdout);
+				break;
 
-                break;
-            case '%':
-                terminal_putchar('%');
-                break;
-            default:
-                terminal_writestring("\nUnknown format specifier %");
-                terminal_putchar(format[i]);
-                terminal_putchar('.');
-        }
-    }
- 
-    va_end(args);
+			case 'c':
+				j=va_arg(args,int);
+				terminal_putchar(j);
+				break;
+
+			case 's':
+				s=va_arg(args,char*);
+				if(s==NULL){
+					terminal_writestring_nolock("(null)");
+					break;
+				}
+				terminal_writestring_nolock(s);
+				break;
+
+			case 'o':
+				j=va_arg(args,int);
+				terminal_writestring_nolock(inttoascii(j,8));
+				//fputs(inttoascii(j,8),stdout);
+
+				break;
+			case '%':
+				terminal_putchar('%');
+				break;
+			default:
+				terminal_writestring_nolock("\nUnknown format specifier %");
+				terminal_putchar(format[i]);
+				terminal_putchar('.');
+		}
+	}
+
+	terminal_unlock_vga();
+	va_end(args);
 }
- 
+

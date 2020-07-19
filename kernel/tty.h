@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "kspin.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -42,5 +43,8 @@ void terminal_scroll();
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
+void terminal_lock_vga();
+void terminal_unlock_vga();
+void terminal_writestring_nolock(const char* data);
 void terminal_writestring(const char* data);
 void kprintf(char* format, ...);

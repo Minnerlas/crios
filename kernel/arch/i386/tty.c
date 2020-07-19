@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "../../tty.h"
+#include "../../kspin.h"
 #include "../../../libc/string.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
@@ -25,12 +26,14 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
 // static const size_t VGA_WIDTH = 80;
 // static const size_t VGA_HEIGHT = 25;
 
+spin_mutex VGA_lock;
 size_t terminal_row;
 size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
 
 void terminal_initialize(void) {
+	VGA_lock = 0;
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
@@ -86,14 +89,30 @@ void terminal_putchar(char c) {
 }
 
 void terminal_write(const char* data, size_t size) {
+	lock_spin_mutex(&VGA_lock);
 	for (size_t i = 0; i < size; i++)
 		terminal_putchar(data[i]);
+	unlock_spin_mutex(&VGA_lock);
 }
 
 // void terminal_writestring(const char* data) {
 // 	terminal_write(data, strlen(data));
 // }
 
-void terminal_writestring(const char* data) {
+void terminal_lock_vga() {
+	lock_spin_mutex(&VGA_lock);
+}
+
+void terminal_unlock_vga() {
+	unlock_spin_mutex(&VGA_lock);
+}
+
+void terminal_writestring_nolock(const char* data) {
 	for(; *data; terminal_putchar(*data++));
+}
+
+void terminal_writestring(const char* data) {
+	lock_spin_mutex(&VGA_lock);
+	for(; *data; terminal_putchar(*data++));
+	unlock_spin_mutex(&VGA_lock);
 }
