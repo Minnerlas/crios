@@ -12,6 +12,10 @@ run:
 
 clean:
 	rm -rvf build
+	rm -f *.bin
 
 link:
 	${PUTANJA}${CC} -o myos.bin  build/*
+
+cln:
+	rm -rvf build
