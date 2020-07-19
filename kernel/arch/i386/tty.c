@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include "../../tty.h"
 #include "../../kspin.h"
-#include "../../../libc/string.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -55,7 +54,9 @@ void terminal_unlock_vga() {
 }
 
 void terminal_setcolor(uint8_t color) {
+	terminal_lock_vga();
 	terminal_color = color;
+	terminal_unlock_vga();
 }
 
 void terminal_scroll() {

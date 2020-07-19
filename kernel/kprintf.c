@@ -8,7 +8,7 @@
 
 char buff[BUFF_DUZ] = {0};
 
-char* inttoascii(unsigned int n, int b){
+static char* inttoascii(unsigned int n, int b){
     char cifre[]="0123456789abcdef";
     int i=0,duz=0;
     buff[BUFF_DUZ-1]='\0';
