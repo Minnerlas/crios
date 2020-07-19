@@ -47,7 +47,7 @@ void kprintf(char* format, ...) {
 				f=1;
 				break;
 			}
-			terminal_putchar(format[i]);
+			terminal_putchar_nolock(format[i]);
 			i++;
 		}
 
@@ -60,7 +60,7 @@ void kprintf(char* format, ...) {
 				j=va_arg(args,int);
 				if (j<0){
 					j=-j;
-					terminal_putchar('-');
+					terminal_putchar_nolock('-');
 				}
 				terminal_writestring_nolock(inttoascii(j,10));
 				//fputs(inttoascii(j,10),stdout);
@@ -81,7 +81,7 @@ void kprintf(char* format, ...) {
 
 			case 'c':
 				j=va_arg(args,int);
-				terminal_putchar(j);
+				terminal_putchar_nolock(j);
 				break;
 
 			case 's':
@@ -100,16 +100,16 @@ void kprintf(char* format, ...) {
 
 				break;
 			case '%':
-				terminal_putchar('%');
+				terminal_putchar_nolock('%');
 				break;
 			default:
 				terminal_writestring_nolock("\nUnknown format specifier %");
-				terminal_putchar(format[i]);
-				terminal_putchar('.');
+				terminal_putchar_nolock(format[i]);
+				terminal_putchar_nolock('.');
 		}
 	}
 
-	terminal_unlock_vga();
 	va_end(args);
+	terminal_unlock_vga();
 }
 

@@ -42,6 +42,7 @@ void terminal_setcolor(uint8_t color);
 void terminal_scroll();
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 void terminal_putchar(char c);
+void terminal_putchar_nolock(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_lock_vga();
 void terminal_unlock_vga();
