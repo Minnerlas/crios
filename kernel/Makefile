@@ -1,7 +1,7 @@
 ARCH = i386
 PUTANJA = /home/nikola/src/i686-elf/bin/
 CC = i686-elf-gcc
-CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra -mno-red-zone
 DEPS = arch/${ARCH}/tty.c tty.h
 
 all: kernel.c arch/${ARCH}/tty.c tty.h

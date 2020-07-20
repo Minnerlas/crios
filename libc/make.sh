@@ -3,7 +3,7 @@ ARCH=i386
 PUTANJA=/home/nikola/src/i686-elf/bin/
 CCBIN=i686-elf-gcc
 CC="$PUTANJA$CCBIN"
-CFLAGS="-std=gnu99 -ffreestanding -O2 -Wall -Wextra"
+CFLAGS="-std=gnu99 -ffreestanding -O2 -Wall -Wextra -mno-red-zone"
 
 for f in arch/$ARCH/*.c
 do

@@ -13,6 +13,8 @@
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif
 
+// extern int size;
+
 void kernel_main(void) {
 	/* Initialize terminal interface */
 	terminal_initialize();
@@ -32,5 +34,6 @@ void kernel_main(void) {
 	terminal_writestring("Ovo je test\n");
 	kprintf("TEST %d\n", 42);
 	kprintf("TEST %p\n", "test");
+	// kprintf("TEST %p\n", size);
 	
 }
