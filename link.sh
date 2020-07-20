@@ -6,4 +6,18 @@
 LFLAGS="-T arch/$ARCH/linker.ld -ffreestanding -O2 -nostdlib -lgcc"
 IME=CriOS
 
-$PUTANJA$CCBIN build/* -o $IME.bin $LFLAGS
+case $ARCH in
+	"i386")
+		$PUTANJA$CCBIN build/* -o "$IME$ARCH.bin" $LFLAGS
+		;;
+
+	"x86_64")
+		$PUTANJA$CCBIN build/* -o "$IME$ARCH.bin" $LFLAGS
+		;;
+
+	*)
+		echo "Nepodrzana arhitektura"
+		exit 1
+		;;
+esac
+

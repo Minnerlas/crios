@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include "tty.h"
 
-#define BUFF_DUZ 42
+#define BUFF_DUZ 70
 
 char buff[BUFF_DUZ] = {0};
 
@@ -69,6 +69,11 @@ void kprintf(char* format, ...) {
 				j=va_arg(args,int);
 				terminal_writestring_nolock(inttoascii(j,10));
 				//fputs(inttoascii(j,10),stdout);
+				break;
+			case 'b':
+				j=va_arg(args,int);
+				terminal_writestring_nolock(inttoascii(j,2));
+				//fputs(inttoascii(j,2),stdout);
 				break;
 
 			case 'p':

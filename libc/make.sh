@@ -5,6 +5,9 @@ CCBIN=i686-elf-gcc
 CC="$PUTANJA$CCBIN"
 CFLAGS="-std=gnu99 -ffreestanding -O2 -Wall -Wextra -mno-red-zone"
 
+echo
+echo "libc/"
+
 for f in arch/$ARCH/*.c
 do
 	t=${f%.c}.o

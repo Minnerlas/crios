@@ -11,7 +11,10 @@ case $ARCH in
 		;;
 	"x86_64")
 		export ASBIN=x86_64-elf-as
+		export ASBIN32=i686-elf-as
 		export CCBIN=x86_64-elf-gcc
+		export CCBIN32=i686-elf-gcc
+		export PUTANJA32=/home/nikola/i686-gcc/bin/
 		export PUTANJA=/home/nikola/x86_64-gcc/bin/
 		;;
 esac

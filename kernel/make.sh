@@ -5,6 +5,9 @@
 CC="$PUTANJA$CCBIN"
 CFLAGS="-std=gnu99 -ffreestanding -O2 -Wall -Wextra -mno-red-zone"
 
+echo 
+echo "kernel/"
+
 case $ARCH in 
 	"i386")
 		for f in arch/$ARCH/*.c

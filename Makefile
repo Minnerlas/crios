@@ -8,7 +8,7 @@ all: kernel.c
 	${PUTANJA}i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
 
 run:
-	qemu-system-i386 -kernel ${IME}.bin
+	qemu-system-i386 -kernel ${IME}*.bin
 
 clean:
 	rm -rvf build

@@ -42,6 +42,7 @@ bootloader will jump to this position once the kernel has been loaded. It
 doesn't make sense to return from this function as the bootloader is gone.
 */
 .section .text
+.code32
 .global _start
 .type _start, @function
 _start:
@@ -84,7 +85,6 @@ _start:
 	stack since (pushed 0 bytes so far), so the alignment has thus been
 	preserved and the call is well defined.
 	*/
-	pushl %ebx
 	call kernel_main
  
 	/*

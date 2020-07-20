@@ -2,20 +2,16 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "tty.h"
+#include "multiboot.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
 #endif
 
-/* This tutorial will only work for the 32-bit ix86 targets. */
-#if !defined(__i386__)
-#error "This tutorial needs to be compiled with a ix86-elf compiler"
-#endif
-
 // extern int size;
 
-void kernel_main(void) {
+void kernel_main(struct multiboot_info *test) {
 	/* Initialize terminal interface */
 	terminal_initialize();
 
@@ -33,7 +29,15 @@ void kernel_main(void) {
 
 	terminal_writestring("Ovo je test\n");
 	kprintf("TEST %d\n", 42);
-	kprintf("TEST %p\n", "test");
-	// kprintf("TEST %p\n", size);
+	kprintf("TEST %p\n\n", "test");
+
+	kprintf("%b flags\n",		test->flags);
+	kprintf("%p mem_lower\n",	test->mem_lower);
+	kprintf("%p mem_upper\n",	test->mem_upper);
+	kprintf("%p boot_device\n",	test->boot_device);
+	kprintf("%s cmdline\n",		test->cmdline);
+	kprintf("%b mods_count\n",	test->mods_count);
+	kprintf("%b mods_addr\n",	test->mods_addr);
+	kprintf("%s boot_lader_name\n",	test->boot_loader_name);
 	
 }
