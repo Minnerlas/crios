@@ -1,7 +1,7 @@
 #!/bin/sh
-ARCH=i386
-PUTANJA=/home/nikola/src/i686-elf/bin/
-CCBIN=i686-elf-gcc
+#ARCH=i386
+#PUTANJA=/home/nikola/src/i686-elf/bin/
+#CCBIN=i686-elf-gcc
 CC="$PUTANJA$CCBIN"
 CFLAGS="-std=gnu99 -ffreestanding -O2 -Wall -Wextra"
 

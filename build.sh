@@ -1,15 +1,16 @@
 #!/bin/sh
 
-ARCH=i386
-AS=i686-elf-as
-PUTANJA=/home/nikola/src/i686-elf/bin/
+export ARCH=i386
+export AS=i686-elf-as
+export CCBIN=i686-elf-gcc
+export PUTANJA=/home/nikola/i686-gcc/bin/
 ROOTDIR=$(pwd)
 IME=CriOS
 
 make cln
 mkdir build
 cd boot
-make AS=$AS
+make AS=$AS PUTANJA=$PUTANJA
 cd $ROOTDIR
 cd kernel
 ./make.sh
