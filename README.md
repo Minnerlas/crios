@@ -1,3 +1,0 @@
-# CriOS
-
-Privremeni README
