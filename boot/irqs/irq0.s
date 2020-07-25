@@ -9,9 +9,7 @@ irq0:
 	push %rsi
 	push %rdi
 	
-	//call irq0_handler
-	mov $0x61, %rdi
-	call terminal_putchar
+	call irq0_handler
 	
 	pop %rdi    
 	pop %rsi    

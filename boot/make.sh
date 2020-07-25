@@ -14,3 +14,15 @@ do
 	echo "$CC -fno-builtin -O2 -nostdinc -nostdlib -ffreestanding -g -Wall -Wextra -Werror -I. -MMD -mno-red-zone -mcmodel=kernel -fno-pie -Wa,--divide -c -o $ROOTDIR/build/$t $f"
 	$CC -fno-builtin -O2 -nostdinc -nostdlib -ffreestanding -g -Wall -Wextra -Werror -I. -MMD -mno-red-zone -mcmodel=kernel -fno-pie -Wa,--divide -c -o $ROOTDIR/build/$t $f
 done
+
+for d in */
+do
+	echo $d
+	for f in $d*.s
+	do
+		t=${f%.s}.o
+		t=${t##*/}
+		echo "$CC -fno-builtin -O2 -nostdinc -nostdlib -ffreestanding -g -Wall -Wextra -Werror -I. -MMD -mno-red-zone -mcmodel=kernel -fno-pie -Wa,--divide -c -o $ROOTDIR/build/$t $f"
+		$CC -fno-builtin -O2 -nostdinc -nostdlib -ffreestanding -g -Wall -Wextra -Werror -I. -MMD -mno-red-zone -mcmodel=kernel -fno-pie -Wa,--divide -c -o $ROOTDIR/build/$t $f
+	done
+done
