@@ -1,7 +1,7 @@
 // #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "kspin.h"
+#include <include/kspin.h>
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 // #if defined(__linux__)
@@ -34,6 +34,7 @@ static const size_t VGA_HEIGHT = 25;
 size_t strlen(const char* str);
 void terminal_initialize(void);
 void terminal_setcolor(uint8_t color);
+void terminal_setcursor(uint8_t x, uint8_t y);
 void terminal_scroll();
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 void terminal_putchar(char c);

@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <include/tty.h>
 #include <include/kspin.h>
+#include <include/io.h>
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -56,6 +57,15 @@ void terminal_setcolor(uint8_t color) {
 	terminal_unlock_vga();
 }
 
+void terminal_setcursor(uint8_t x, uint8_t y) {
+	uint16_t pos = y * VGA_WIDTH + x;
+
+	outb(0x3D4, 0x0F);
+	outb(0x3D5, (uint8_t) (pos & 0xFF));
+	outb(0x3D4, 0x0E);
+	outb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
+}
+
 void terminal_scroll() {
 	size_t x, y;
 	for(y = 0; y < VGA_HEIGHT - 1; y++)
@@ -94,6 +104,7 @@ void terminal_putchar_nolock(char c) {
 			}
 		}
 	}
+	terminal_setcursor(terminal_column, terminal_row);
 }
 
 void terminal_putchar(char c) {
@@ -105,7 +116,7 @@ void terminal_putchar(char c) {
 void terminal_write(const char* data, size_t size) {
 	terminal_lock_vga();
 	for (size_t i = 0; i < size; i++)
-		terminal_putchar(data[i]);
+		terminal_putchar_nolock(data[i]);
 	terminal_unlock_vga();
 }
 
@@ -132,6 +143,7 @@ void terminal_clear_nolock() {
 			terminal_buffer[index] = vga_entry(' ', terminal_color);
 		}
 	}
+	terminal_setcursor(terminal_column, terminal_row);
 };
 
 void terminal_clear() {

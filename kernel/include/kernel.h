@@ -19,7 +19,7 @@
 #define ICW4_BUF_MASTER	0x0C	/* Buffered mode/master */
 #define ICW4_SFNM	0x10		/* Special fully nested (not) */
 #define PIC_EOI		0x20		/* End-of-interrupt command code */
-#define PIC1_OFFSET 0x20
+#define PIC1_OFFSET 32
 #define PIC2_OFFSET (PIC1_OFFSET+8)
 
 enum interrupt_index {
