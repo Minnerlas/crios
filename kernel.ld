@@ -37,7 +37,16 @@ SECTIONS
 
   . = ALIGN(0x1000);
 
-  .rodata : AT ( (LOADADDR (.text) + SIZEOF (.text) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+  .idt BLOCK(0x1000): AT ( (LOADADDR (.text) + SIZEOF (.text) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+  {
+	  _idt = .;
+	  . = . + 0x1000;
+  }
+
+  . = ALIGN(0x1000);
+
+  .rodata : AT ( (LOADADDR (.idt) + 0x1000 + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+/*  .rodata : AT ( (LOADADDR (.text) + SIZEOF (.text) + 0xFFF) & 0xFFFFFFFFFFFFF000 ) */
   {
     *(.rodata)
   }

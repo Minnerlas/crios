@@ -8,6 +8,7 @@ clean:
 	rm -rvf iso
 	rm -vf ${IME}* 
 	rm -vf *.iso
+	rm -vf *.dmp
 
 iso: kernel
 	mkdir -p iso/boot/grub
