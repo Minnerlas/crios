@@ -41,6 +41,8 @@ void terminal_putchar_nolock(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_lock_vga();
 void terminal_unlock_vga();
+void terminal_clear_nolock();
+void terminal_clear();
 void terminal_writestring_nolock(const char* data);
 void terminal_writestring(const char* data);
 void kprintf(char* format, ...);

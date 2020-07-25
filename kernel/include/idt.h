@@ -5,6 +5,8 @@
 #ifndef IDT_H
 #define IDT_H
 
+#define NIDT 256
+
 struct IDTDescr {
 	uint16_t offset_1; // offset bits 0..15
 	uint16_t selector; // a code segment selector in GDT or LDT
@@ -15,35 +17,107 @@ struct IDTDescr {
 	uint32_t zero;     // reserved
 };
 
-#define NIDT 256
 
 extern struct IDTDescr _idt[NIDT];
-//struct IDTDescr _idt[NIDT];
 extern void *idtDescriptor;
 extern void *_loadIDT();
 
-void loadIDT() {
-	for(int i = 0; i < NIDT; i++) {
-		_idt[i].zero = 0;
-		_idt[i].offset_1 = (uint16_t)(((uint64_t)&irq0 & 0xffff));
-		//_idt[i].offset_2 = (uint16_t)(((uint64_t)&irq0 & 0xffff0000) >> 16);
-		//_idt[i].offset_3 = (uint32_t)(((uint64_t)&irq0 & 0xffffffff00000000) >> 32);
-		_idt[i].offset_2 = (uint16_t)(((uint64_t)&irq0) >> 16);
-		_idt[i].offset_3 = (uint32_t)(((uint64_t)&irq0) >> 32);
-		_idt[i].ist = 0;
-		_idt[i].selector = 0x08;
-		_idt[i].type_attr = 0x8e;
-	}
+void PIC_remap(int offset1, int offset2) {
+	unsigned char a1, a2;
 
-	outb(0x21, 0xfd);
-	outb(0xa1, 0xff);
+	a1 = inb(PIC1_DATA);                        // save masks
+	a2 = inb(PIC2_DATA);
+
+	outb(PIC1_COMMAND, ICW1_INIT | ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
+	io_wait();
+	outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
+	io_wait();
+	outb(PIC1_DATA, offset1);                 // ICW2: Master PIC vector offset
+	io_wait();
+	outb(PIC2_DATA, offset2);                 // ICW2: Slave PIC vector offset
+	io_wait();
+	outb(PIC1_DATA, 4);                       // ICW3: tell Master PIC that there is a slave PIC at IRQ2 (0000 0100)
+	io_wait();
+	outb(PIC2_DATA, 2);                       // ICW3: tell Slave PIC its cascade identity (0000 0010)
+	io_wait();
+
+	outb(PIC1_DATA, ICW4_8086);
+	io_wait();
+	outb(PIC2_DATA, ICW4_8086);
+	io_wait();
+
+	outb(PIC1_DATA, a1);   // restore saved masks.
+	outb(PIC2_DATA, a2);
+}
+
+
+void remap_PIC(uint8_t off1, uint8_t off2) {
+//void remap_PIC() {
+	uint8_t a1, a2;
+	a1 = inb(PIC1_DATA);
+	a2 = inb(PIC2_DATA);
+
+	outb(PIC1_COMMAND, ICW1_INIT | ICW1_ICW4);
+	outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
+	outb(PIC1_DATA, off1);
+	outb(PIC2_DATA, off2);
+	//outb(PIC1_DATA, 0);
+	//outb(PIC2_DATA, 8);
+	outb(PIC1_DATA, 4);
+	outb(PIC2_DATA, 2);
+	outb(PIC1_DATA, ICW4_8086);
+	outb(PIC2_DATA, ICW4_8086);
+
+	outb(PIC1_DATA, a1);
+	outb(PIC2_DATA, a2);
+}
+
+
+void setIDTentry(int i, void *irq_addr) {
+	//kprintf("irqaddr %p\n", irq_addr);
+	_idt[i].zero = 0;
+	_idt[i].offset_1 = (uint16_t)(((uint64_t)irq_addr & 0xffff));
+	_idt[i].offset_2 = (uint16_t)(((uint64_t)irq_addr & 0xffff0000) >> 16);
+	_idt[i].offset_3 = (uint32_t)(((uint64_t)irq_addr) >> 32);
+	_idt[i].ist = 0;
+	_idt[i].selector = 0x08;
+	_idt[i].type_attr = 0x8e;
+}
+
+void loadIDT() {
+	//for(int i = 0; i < NIDT; i++) {
+	//	setIDTentry(i, &irq_kbd);
+	//}
+
+	//setIDTentry(TIMER, &irq_timer);	
+	//setIDTentry(KBD, &irq_kbd);	
+	setIDTentry(0, &irq_timer);	
+	setIDTentry(1, &irq_kbd);	
+	//setIDTentry(8, &irq_double_fault);	
+
+	//PIC_remap(PIC1_OFFSET, PIC2_OFFSET);
+	//outb(0x20, 0x11);
+	//outb(0xA0, 0x11);
+	//outb(0x21, 0x20);
+	//outb(0xA1, 0x28);
+	//outb(0x21, 0x04);
+	//outb(0xA1, 0x02);
+	//outb(0x21, 0x01);
+	//outb(0xA1, 0x01);
+	//outb(0x21, 0x0);
+	//outb(0xA1, 0x0);
+	
+	//remap_PIC(PIC1_OFFSET, PIC2_OFFSET);
+	remap_PIC(0, 8);
+	//MASKA 1 ZNAČI DA NIJE UKLJUČEN 
+	//0x11111111 NEMA
+	//0x11111110 TAJMER
+	//0x11111101 TASTATURA
+	//0x11111100 TASTATURA I TAJMER
+	outb(PIC1_DATA, 0xfc);
+	outb(PIC2_DATA, 0xff);
 
 	_loadIDT();
-
-	//asm("lidt (%0)"
-	//		:
-	//	   	: "r" (idtDescriptor) 
-	//);
 }
 
 #endif /* IDT_H */
