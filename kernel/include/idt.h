@@ -102,7 +102,7 @@ void loadIDT() {
 	kprintf("%d\n", sizeof(struct IDTDescr));
 	//setIDTentry(PIC1_OFFSET, &irq_timer);
 	//setIDTentry(PIC1_OFFSET+1, &irq_kbd);
-	etIDTentry(0x21, &irq_kbd);
+	setIDTentry(0x21, &irq_kbd);
 	//setIDTentry(9, &irq_kbd);
 	//int a = 15;
 	//setIDTentry(a, &irq_timer);
