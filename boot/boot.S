@@ -33,6 +33,7 @@ header_end:
 
 .data
 .align GDT_TABLE_ALIGNMENT
+.global gdt_table
 gdt_table:
         .8byte GDT_FIRST_ENTRY
         .8byte GDT_KERNEL_ENTRY
@@ -40,6 +41,7 @@ gdt_table:
 gdt_table_end:
         .skip (GDT_TABLE_SIZE - (gdt_table_end - gdt_table))
 
+.global gdt_ptr
 gdt_ptr:
          .short GDT_TABLE_SIZE - 1
          .long gdt_table

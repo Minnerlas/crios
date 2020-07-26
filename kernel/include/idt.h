@@ -22,6 +22,7 @@ extern struct IDTDescr _idt[NIDT];
 extern void *idtDescriptor;
 extern void *_loadIDT();
 
+/*
 void PIC_remap(int offset1, int offset2) {
 	unsigned char a1, a2;
 
@@ -49,10 +50,11 @@ void PIC_remap(int offset1, int offset2) {
 	outb(PIC1_DATA, a1);   // restore saved masks.
 	outb(PIC2_DATA, a2);
 }
+*/
 
 
-//void remap_PIC(uint8_t off1, uint8_t off2) {
-void remap_PIC() {
+void remap_PIC(uint8_t off1, uint8_t off2) {
+//void remap_PIC() {
 	uint8_t a1, a2;
 	a1 = inb(PIC1_DATA);
 	a2 = inb(PIC2_DATA);
@@ -61,14 +63,15 @@ void remap_PIC() {
 	io_wait();
 	outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
 	io_wait();
-	//outb(PIC1_DATA, off1);
-	//io_wait();
-	//outb(PIC2_DATA, off2);
-	//io_wait();
-	outb(PIC1_DATA, 0x20);
+	outb(PIC1_DATA, off1);
 	io_wait();
-	outb(PIC2_DATA, 0x28);
+	outb(PIC2_DATA, off2);
 	io_wait();
+	//int a = 15;
+	//outb(PIC1_DATA, a);
+	//io_wait();
+	//outb(PIC2_DATA, a+8);
+	//io_wait();
 	outb(PIC1_DATA, 4);
 	io_wait();
 	outb(PIC2_DATA, 2);
@@ -96,13 +99,14 @@ void setIDTentry(int i, void *irq_addr) {
 }
 
 void loadIDT() {
-	//for(int i = 8; i < 10; i++)
-	//	setIDTentry(i, &irq_kbd);
+	for(int i = 0; i < 255; i++)
+		setIDTentry(i, &irq_kbd);
+		//setIDTentry(i, &irq_timer);
 
-	kprintf("%d\n", sizeof(struct IDTDescr));
+	//kprintf("%d\n", sizeof(struct IDTDescr));
 	//setIDTentry(PIC1_OFFSET, &irq_timer);
 	//setIDTentry(PIC1_OFFSET+1, &irq_kbd);
-	setIDTentry(0x21, &irq_kbd);
+	//setIDTentry(0x21, &irq_kbd);
 	//setIDTentry(9, &irq_kbd);
 	//int a = 15;
 	//setIDTentry(a, &irq_timer);
@@ -121,8 +125,10 @@ void loadIDT() {
 	//outb(0x21, 0x0);
 	//outb(0xA1, 0x0);
 
-	//remap_PIC(a, a+8);
-	remap_PIC();
+	int a = 15;
+	remap_PIC(a, a+8);
+	//remap_PIC();
+	//remap_PIC(PIC1_OFFSET, PIC2_OFFSET);
 	//MASKA 1 ZNAČI DA NIJE UKLJUČEN 
 	//0x11111111 0xff NIŠTA
 	//0x11111110 0xfe TAJMER

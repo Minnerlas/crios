@@ -3,7 +3,8 @@
 export ROOTDIR=$(pwd)
 export CC="x86_64-elf-gcc"
 export IME=CriOS
-export CFLAGS="-std=gnu99 -fno-builtin -O2 -nostdlib -ffreestanding -g -Wall -Wextra -Werror -I. -MMD -mno-red-zone -mcmodel=kernel -fno-pie -c"
+export OPT="-O0"
+export CFLAGS="-std=gnu99 -fno-builtin $OPT -nostdlib -ffreestanding -g -Wall -Wextra -Werror -I. -MMD -mno-red-zone -mcmodel=kernel -fno-pie -c"
 
 make cln
 mkdir build

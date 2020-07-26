@@ -9,6 +9,7 @@ clean:
 	rm -vf ${IME}* 
 	rm -vf *.iso
 	rm -vf *.dmp
+	rm -vf *.sym
 
 iso: kernel
 	mkdir -p iso/boot/grub
@@ -19,4 +20,9 @@ iso: kernel
 run: runiso
 
 runiso:
-	qemu-system-x86_64 -cdrom *.iso
+	qemu-system-x86_64 -cdrom *.iso 
+
+dbg:
+	objcopy --only-keep-debug ${IME}.bin kernel.sym
+	objcopy --strip-debug ${IME}.bin
+	qemu-system-x86_64 -s -S -cdrom *.iso 

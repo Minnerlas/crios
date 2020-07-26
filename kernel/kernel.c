@@ -4,6 +4,9 @@
 
 int i = 0;
 
+extern void *gdt_table;
+extern void *gdt_ptr;
+
 void test() {
 	test();
 	i++;
@@ -21,6 +24,8 @@ void kernel_main() {
 	kprintf("idtDescriptor  %p\n", idtDescriptor);
 	kprintf("&idtDescriptor %p\n", &idtDescriptor);
 	kprintf("_loadIDT       %p\n", _loadIDT);
+	kprintf("GDT            %p\n", &gdt_table);
+	kprintf("GDT ptr        %p\n", &gdt_ptr);
 
 	terminal_putchar('\n');
 	kprintf("irq        %p\n", &irq0);
@@ -50,8 +55,10 @@ void kernel_main() {
 	kprintf("zero       0x%x\n", _idt[a].zero);
 
 	asm volatile ("sti\n");
-	//test();
+	test();
 	asm volatile ("hlt\n");
+
+	//asm volatile ("int $0\n");
 
 
 	for(;;)
