@@ -55,7 +55,7 @@ void kernel_main() {
 	kprintf("zero       0x%x\n", _idt[a].zero);
 
 	asm volatile ("sti\n");
-	test();
+	//test();
 	asm volatile ("hlt\n");
 
 	//asm volatile ("int $0\n");

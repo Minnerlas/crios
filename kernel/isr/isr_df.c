@@ -3,11 +3,8 @@
 #include <include/kernel.h>
 
 void irq_double_fault_handler() {
-	terminal_putchar_nolock('D');
-	terminal_putchar_nolock('D');
-	terminal_putchar_nolock('D');
-	terminal_putchar_nolock('D');
-	terminal_putchar_nolock('D');
+	terminal_setcolor(VGA_COLOR_RED);
+	terminal_writestring("\n============\nDouble FAULT\n============\n");
 	for(;;)
 		asm volatile("hlt\n");
 }

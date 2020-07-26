@@ -19,8 +19,11 @@ iso: kernel
 
 run: runiso
 
+runcurses:
+	qemu-system-x86_64 -curses -cdrom *.iso
+
 runiso:
-	qemu-system-x86_64 -cdrom *.iso 
+	qemu-system-x86_64 -cdrom *.iso
 
 dbg:
 	objcopy --only-keep-debug ${IME}.bin kernel.sym

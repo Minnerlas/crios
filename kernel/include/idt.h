@@ -86,9 +86,7 @@ void remap_PIC(uint8_t off1, uint8_t off2) {
 	outb(PIC2_DATA, a2);
 }
 
-
 void setIDTentry(int i, void *irq_addr) {
-	//kprintf("irqaddr %p\n", irq_addr);
 	_idt[i].zero = 0;
 	_idt[i].offset_1 = (uint16_t)(((uint64_t)irq_addr & 0xffff));
 	_idt[i].offset_2 = (uint16_t)(((uint64_t)irq_addr & 0xffff0000) >> 16);
@@ -98,19 +96,32 @@ void setIDTentry(int i, void *irq_addr) {
 	_idt[i].type_attr = 0x8e;
 }
 
+void clearIDT() {
+	for(int i = 0; i < NIDT; i++) {
+		_idt[i].zero = 0;
+		_idt[i].offset_1 = 0;
+		_idt[i].offset_2 = 0;
+		_idt[i].offset_3 = 0;
+		_idt[i].ist = 0;
+		_idt[i].selector = 0;
+		_idt[i].type_attr = 0;
+	}
+}
+
 void loadIDT() {
-	for(int i = 0; i < 255; i++)
-		setIDTentry(i, &irq_kbd);
-		//setIDTentry(i, &irq_timer);
+	//for(int i = 0; i < 255; i++)
+	//	setIDTentry(i, &irq_kbd);
+	//	setIDTentry(i, &irq_timer);
 
 	//kprintf("%d\n", sizeof(struct IDTDescr));
 	//setIDTentry(PIC1_OFFSET, &irq_timer);
 	//setIDTentry(PIC1_OFFSET+1, &irq_kbd);
 	//setIDTentry(0x21, &irq_kbd);
 	//setIDTentry(9, &irq_kbd);
-	//int a = 15;
+	clearIDT();
+	int a = 0;
 	//setIDTentry(a, &irq_timer);
-	//setIDTentry(a+1, &irq_kbd);
+	setIDTentry(a+1, &irq_kbd);
 	setIDTentry(8, &irq_double_fault);
 
 	//PIC_remap(PIC1_OFFSET, PIC2_OFFSET);
@@ -125,7 +136,7 @@ void loadIDT() {
 	//outb(0x21, 0x0);
 	//outb(0xA1, 0x0);
 
-	int a = 15;
+	//remap_PIC(0, 8);
 	remap_PIC(a, a+8);
 	//remap_PIC();
 	//remap_PIC(PIC1_OFFSET, PIC2_OFFSET);
