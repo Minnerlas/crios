@@ -111,7 +111,7 @@ void loadIDT() {
 	//int a = 15;
 	//setIDTentry(a, &irq_timer);
 	//setIDTentry(a+1, &irq_kbd);
-	//setIDTentry(8, &irq_double_fault);
+	setIDTentry(8, &irq_double_fault);
 
 	//PIC_remap(PIC1_OFFSET, PIC2_OFFSET);
 	//outb(0x20, 0x11);

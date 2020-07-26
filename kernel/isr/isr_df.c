@@ -8,5 +8,6 @@ void irq_double_fault_handler() {
 	terminal_putchar_nolock('D');
 	terminal_putchar_nolock('D');
 	terminal_putchar_nolock('D');
-	for(;;);
+	for(;;)
+		asm volatile("hlt\n");
 }
