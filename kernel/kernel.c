@@ -6,6 +6,8 @@ int i = 0;
 
 extern void *gdt_table;
 extern void *gdt_ptr;
+extern uint64_t _kernel_physical_end;
+extern uint64_t _kernel_virtual_end;
 
 void test() {
 	test();
@@ -54,6 +56,8 @@ void kernel_main() {
 	kprintf("offset_3   0x%x\n", _idt[a].offset_3);
 	kprintf("zero       0x%x\n", _idt[a].zero);
 
+	//kprintf("\n_kernel_virtual_end %p\n", _kernel_physical_end);
+
 	asm volatile ("sti\n");
 	//test();
 	asm volatile ("hlt\n");
@@ -61,9 +65,9 @@ void kernel_main() {
 	//asm volatile ("int $0\n");
 
 
-	//for(;;)
-	//	asm volatile ("hlt\n");
+	for(;;)
+		asm volatile ("hlt\n");
 
-	for(int i = 0;; i++)
-		kprintf("%d\n", i);
+	//for(int i = 0;; i++)
+	//	kprintf("%d\n", i);
 }
