@@ -97,3 +97,28 @@ irq_double_fault:
 	sti
 	
 	iretq
+
+.global irq_general_protection
+.type irq_general_protection, @function
+irq_general_protection:
+	cli
+	push %rax
+	push %rcx
+	push %rdx
+	push %rbx
+	push %rbp
+	push %rsi
+	push %rdi
+	
+	call irq_double_fault_handler
+	
+	pop %rdi    
+	pop %rsi    
+	pop %rbp    
+	pop %rbx    
+	pop %rdx    
+	pop %rcx
+	pop %rax
+	sti
+	
+	iretq

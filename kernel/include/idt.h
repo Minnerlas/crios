@@ -52,7 +52,6 @@ void PIC_remap(int offset1, int offset2) {
 }
 */
 
-
 void remap_PIC(uint8_t off1, uint8_t off2) {
 //void remap_PIC() {
 	uint8_t a1, a2;
@@ -109,7 +108,7 @@ void clearIDT() {
 }
 
 void loadIDT() {
-	//for(int i = 0; i < 255; i++)
+	//for(int i = 0; i < 100; i++)
 	//	setIDTentry(i, &irq_kbd);
 	//	setIDTentry(i, &irq_timer);
 
@@ -120,24 +119,16 @@ void loadIDT() {
 	//setIDTentry(9, &irq_kbd);
 	clearIDT();
 	int a = 0;
-	//setIDTentry(a, &irq_timer);
+	setIDTentry(a, &irq_timer);
 	setIDTentry(a+1, &irq_kbd);
 	setIDTentry(8, &irq_double_fault);
+	setIDTentry(13, &irq_general_protection);
 
 	//PIC_remap(PIC1_OFFSET, PIC2_OFFSET);
-	//outb(0x20, 0x11);
-	//outb(0xA0, 0x11);
-	//outb(0x21, 0x20);
-	//outb(0xA1, 0x28);
-	//outb(0x21, 0x04);
-	//outb(0xA1, 0x02);
-	//outb(0x21, 0x01);
-	//outb(0xA1, 0x01);
-	//outb(0x21, 0x0);
-	//outb(0xA1, 0x0);
+	//PIC_remap(a, a+8);
 
-	//remap_PIC(0, 8);
-	remap_PIC(a, a+8);
+	remap_PIC(0, 8);
+	//remap_PIC(a, a+8);
 	//remap_PIC();
 	//remap_PIC(PIC1_OFFSET, PIC2_OFFSET);
 	//MASKA 1 ZNAČI DA NIJE UKLJUČEN 
@@ -145,7 +136,7 @@ void loadIDT() {
 	//0x11111110 0xfe TAJMER
 	//0x11111101 0xfd TASTATURA
 	//0x11111100 0xfc TASTATURA I TAJMER
-	outb(PIC1_DATA, 0xfd);
+	outb(PIC1_DATA, 0xfc);
 	outb(PIC2_DATA, 0xff);
 
 	_loadIDT();

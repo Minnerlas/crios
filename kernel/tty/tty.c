@@ -35,6 +35,7 @@ void terminal_initialize(void) {
 	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	terminal_buffer = VGA_BUFFER;
+	terminal_enable_cursor(13, 14);
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
@@ -55,6 +56,19 @@ void terminal_setcolor(uint8_t color) {
 	terminal_lock_vga();
 	terminal_color = color;
 	terminal_unlock_vga();
+}
+
+void terminal_enable_cursor(uint8_t cursor_start, uint8_t cursor_end) {
+	outb(0x3D4, 0x0A);
+	outb(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
+
+	outb(0x3D4, 0x0B);
+	outb(0x3D5, (inb(0x3D5) & 0xE0) | cursor_end);
+}
+
+void terminal_disable_cursor() {
+	outb(0x3D4, 0x0A);
+	outb(0x3D5, 0x20);
 }
 
 void terminal_setcursor(uint8_t x, uint8_t y) {
