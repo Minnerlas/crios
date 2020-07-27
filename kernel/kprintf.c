@@ -59,12 +59,12 @@ static char* longtoascii(unsigned long n, int b){
 }
  
 void kprintf(char* format, ...) {
+	terminal_lock_vga();
     va_list args;
     int j=0,f=0;
     char *s;
     va_start(args, format);
 
-	terminal_lock_vga();
 	for(int i=0; format[i]!=0; i++){
 		while(format[i]!='%'){
 			if(format[i]==0){

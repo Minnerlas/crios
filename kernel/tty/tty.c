@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <include/tty.h>
 #include <include/kspin.h>
+#include <include/kernel.h>
 #include <include/io.h>
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
@@ -45,11 +46,13 @@ void terminal_initialize(void) {
 }
 
 void terminal_lock_vga() {
+	disable_interrupts();
 	lock_spin_mutex(&VGA_lock);
 }
 
 void terminal_unlock_vga() {
 	unlock_spin_mutex(&VGA_lock);
+	enable_interrupts();
 }
 
 void terminal_setcolor(uint8_t color) {

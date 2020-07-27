@@ -17,3 +17,11 @@ void io_wait() {
     asm volatile ( "outb %%al, $0x80" : : "a"(0) );
     /* %%al instead of %0 makes no difference.  TODO: does the register need to be zeroed? */
 }
+
+void disable_interrupts() {
+	asm volatile ("cli\n");
+}
+
+void enable_interrupts() {
+	asm volatile ("sti\n");
+}

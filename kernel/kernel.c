@@ -61,8 +61,8 @@ void kernel_main() {
 	//asm volatile ("int $0\n");
 
 
-	for(;;)
-		asm volatile ("hlt\n");
+	//for(;;)
+	//	asm volatile ("hlt\n");
 
 	for(int i = 0;; i++)
 		kprintf("%d\n", i);

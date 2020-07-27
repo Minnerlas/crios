@@ -127,8 +127,8 @@ void loadIDT() {
 	//PIC_remap(PIC1_OFFSET, PIC2_OFFSET);
 	//PIC_remap(a, a+8);
 
-	remap_PIC(0, 8);
-	//remap_PIC(a, a+8);
+	//remap_PIC(0, 8);
+	remap_PIC(a, a+8);
 	//remap_PIC();
 	//remap_PIC(PIC1_OFFSET, PIC2_OFFSET);
 	//MASKA 1 ZNAČI DA NIJE UKLJUČEN 
