@@ -59,12 +59,11 @@ void kernel_main() {
 
 	//kprintf("\n_kernel_virtual_end %p\n", _kernel_physical_end);
 
-	//asm volatile ("sti\n");
+	asm volatile ("sti\n");
 	//test();
-	//asm volatile ("hlt\n");
+	asm volatile ("hlt\n");
 
-	asm volatile ("int $32");
-	//asm volatile ("int $0\n");
+	//asm volatile ("int $1\n");
 
 
 	for(;;)
