@@ -29,3 +29,8 @@ dbg:
 	objcopy --only-keep-debug ${IME}.bin kernel.sym
 	objcopy --strip-debug ${IME}.bin
 	qemu-system-x86_64 -s -S -cdrom *.iso 
+
+dbgcurses:
+	objcopy --only-keep-debug ${IME}.bin kernel.sym
+	objcopy --strip-debug ${IME}.bin
+	qemu-system-x86_64 -curses -s -S -cdrom *.iso 

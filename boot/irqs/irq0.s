@@ -98,6 +98,31 @@ irq_double_fault:
 	
 	iretq
 
+.global irq_page_fault
+.type irq_page_fault, @function
+irq_page_fault:
+	cli
+	push %rax
+	push %rcx
+	push %rdx
+	push %rbx
+	push %rbp
+	push %rsi
+	push %rdi
+	
+	call irq_page_fault_handler
+	
+	pop %rdi    
+	pop %rsi    
+	pop %rbp    
+	pop %rbx    
+	pop %rdx    
+	pop %rcx
+	pop %rax
+	sti
+	
+	iretq
+
 .global irq_general_protection
 .type irq_general_protection, @function
 irq_general_protection:
@@ -110,7 +135,7 @@ irq_general_protection:
 	push %rsi
 	push %rdi
 	
-	call irq_double_fault_handler
+	call irq_general_protection_handler
 	
 	pop %rdi    
 	pop %rsi    

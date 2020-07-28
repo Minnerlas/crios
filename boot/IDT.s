@@ -1,7 +1,7 @@
 .section .data
 .global idtDescriptor
 idtDescriptor:
-	.short 0x100
+	.2byte 255
 	.8byte _idt
 
 .global _loadIDT

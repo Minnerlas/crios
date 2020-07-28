@@ -7,7 +7,7 @@
 
 #define NIDT 256
 
-struct IDTDescr {
+struct IDTEntry {
 	uint16_t offset_1; // offset bits 0..15
 	uint16_t selector; // a code segment selector in GDT or LDT
 	uint8_t ist;       // bits 0..2 holds Interrupt Stack Table offset, rest of bits zero.
@@ -18,10 +18,14 @@ struct IDTDescr {
 };
 
 
-extern struct IDTDescr _idt[NIDT];
+extern struct IDTEntry _idt[NIDT];
 extern void *idtDescriptor;
 extern void *_loadIDT();
 
+struct IDTDesc {
+	uint16_t size;
+	struct IDTEntry *idt;
+} __packed__;
 /*
 void PIC_remap(int offset1, int offset2) {
 	unsigned char a1, a2;
@@ -108,21 +112,22 @@ void clearIDT() {
 }
 
 void loadIDT() {
-	//for(int i = 0; i < 100; i++)
+	clearIDT();
+	for(int i = 0; i < 100; i++)
 	//	setIDTentry(i, &irq_kbd);
-	//	setIDTentry(i, &irq_timer);
+		setIDTentry(i, &irq_timer);
 
 	//kprintf("%d\n", sizeof(struct IDTDescr));
 	//setIDTentry(PIC1_OFFSET, &irq_timer);
 	//setIDTentry(PIC1_OFFSET+1, &irq_kbd);
 	//setIDTentry(0x21, &irq_kbd);
 	//setIDTentry(9, &irq_kbd);
-	clearIDT();
 	int a = 0;
 	setIDTentry(a, &irq_timer);
 	setIDTentry(a+1, &irq_kbd);
-	setIDTentry(8, &irq_double_fault);
-	setIDTentry(13, &irq_general_protection);
+	setIDTentry(8,	&irq_double_fault);
+	setIDTentry(13,	&irq_general_protection);
+	setIDTentry(14,	&irq_page_fault);
 
 	//PIC_remap(PIC1_OFFSET, PIC2_OFFSET);
 	//PIC_remap(a, a+8);
@@ -136,7 +141,7 @@ void loadIDT() {
 	//0x11111110 0xfe TAJMER
 	//0x11111101 0xfd TASTATURA
 	//0x11111100 0xfc TASTATURA I TAJMER
-	outb(PIC1_DATA, 0xfc);
+	outb(PIC1_DATA, 0xfd);
 	outb(PIC2_DATA, 0xff);
 
 	_loadIDT();

@@ -55,9 +55,14 @@ void terminal_unlock_vga() {
 	enable_interrupts();
 }
 
+
+void terminal_setcolor_nolock(uint8_t color) {
+	terminal_color = color;
+}
+
 void terminal_setcolor(uint8_t color) {
 	terminal_lock_vga();
-	terminal_color = color;
+	terminal_setcolor_nolock(color);
 	terminal_unlock_vga();
 }
 

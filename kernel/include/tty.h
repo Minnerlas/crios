@@ -35,6 +35,7 @@ size_t strlen(const char* str);
 void terminal_initialize(void);
 void terminal_enable_cursor(uint8_t cursor_start, uint8_t cursor_end);
 void terminal_disable_cursor();
+void terminal_setcolor_nolock(uint8_t color);
 void terminal_setcolor(uint8_t color);
 void terminal_setcursor(uint8_t x, uint8_t y);
 void terminal_scroll();
